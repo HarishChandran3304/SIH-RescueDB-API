@@ -23,11 +23,11 @@ const rescueRequestSchema = new mongoose.Schema(
       required: true,
     },
     requestedBy: {
-      type: String,
-      required: false,
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
     },
     assignedTo: {
-      type: [String],
+      type: [mongoose.Schema.Types.ObjectId],
       required: false,
     },
   },

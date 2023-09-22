@@ -6,6 +6,14 @@ const rescueAgencySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    email: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      require: true,
+    },
     address: {
       type: String,
       require: true,
@@ -21,6 +29,10 @@ const rescueAgencySchema = new mongoose.Schema(
     available: {
       type: Boolean,
       required: true,
+    },
+    currentRequest: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: false,
     },
   },
   {
