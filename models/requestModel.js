@@ -18,7 +18,7 @@ const rescueRequestSchema = new mongoose.Schema(
       type: [String],
       required: true,
     },
-    acttive: {
+    active: {
       type: Boolean,
       required: true,
     },

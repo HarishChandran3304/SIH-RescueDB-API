@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 
-const Agency = require("../models/requestModel");
+const Request = require("../models/requestModel");
 
 const getRequests = asyncHandler(async (req, res) => {
   const requests = await Request.find({});

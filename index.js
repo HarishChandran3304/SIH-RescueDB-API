@@ -1,6 +1,5 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const colors = require("colors");
 const PORT = process.env.PORT || 5000;
 const connectDB = require("./config/db");
 
