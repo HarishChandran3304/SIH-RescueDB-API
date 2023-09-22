@@ -65,10 +65,10 @@ const createAgency = asyncHandler(async (req, res) => {
     available: req.body.available,
   });
   res.status(201).json({
-    _id: agency._id,
+    _id: agency.id,
     name: agency.name,
     email: agency.email,
-    token: generateToken(agency._id),
+    token: generateToken(agency.id),
   });
 });
 
@@ -79,7 +79,7 @@ const loginAgency = asyncHandler(async (req, res) => {
 
   if (agency && (await bcrypt.compare(password, agency.password))) {
     res.json({
-      _id: agency._id,
+      _id: agency.id,
       name: agency.name,
       email: agency.email,
       token: generateToken(agency._id),
@@ -88,8 +88,8 @@ const loginAgency = asyncHandler(async (req, res) => {
 });
 
 const getMyAgency = asyncHandler(async (req, res) => {
-  const agency = await Agency.findById(req.agency._id);
-  res.status(200).json(agency);
+  const { _id, name, email } = await Agency.findById(req.agency.id);
+  res.status(200).json({ _id, name, email });
 });
 
 const updateAgency = asyncHandler(async (req, res) => {

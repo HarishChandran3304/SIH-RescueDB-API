@@ -9,13 +9,14 @@ const {
   updateAgency,
   deleteAgency,
 } = require("../controllers/agencyController");
+const { protect } = require("../middleware/authMiddleware");
 
-router.get("/", getAgencies);
-router.get("/sort", sortAgencies);
-router.post("/", createAgency);
-router.post("/login", loginAgency);
-router.get("/me", getMyAgency);
-router.put("/:id", updateAgency);
-router.delete("/:id", deleteAgency);
+router.get("/", protect, getAgencies);
+router.get("/sort", protect, sortAgencies);
+router.post("/", protect, createAgency);
+router.post("/login", protect, loginAgency);
+router.get("/myagency", protect, getMyAgency);
+router.put("/:id", protect, updateAgency);
+router.delete("/:id", protect, deleteAgency);
 
 module.exports = router;
