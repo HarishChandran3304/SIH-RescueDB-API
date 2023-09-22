@@ -3,19 +3,19 @@ const mongoose = require("mongoose");
 const rescueAgencySchema = new mongoose.Schema(
   {
     name: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     address: {
-        type: String,
-        require: true,
+      type: String,
+      require: true,
     },
     agencyType: {
       type: String,
       required: true,
     },
     coordinates: {
-      type: [String],
+      type: [Number],
       required: true,
     },
     available: {
@@ -25,6 +25,7 @@ const rescueAgencySchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    collection: "agencies",
   }
 );
 

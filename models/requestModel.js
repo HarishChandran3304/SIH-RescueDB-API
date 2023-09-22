@@ -15,7 +15,7 @@ const rescueRequestSchema = new mongoose.Schema(
       required: true,
     },
     coordinates: {
-      type: [String],
+      type: [Number],
       required: true,
     },
     active: {
@@ -33,6 +33,7 @@ const rescueRequestSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    collection: "requests",
   }
 );
 
