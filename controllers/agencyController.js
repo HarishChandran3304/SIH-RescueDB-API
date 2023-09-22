@@ -3,9 +3,54 @@ const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
 const Agency = require("../models/rescueAgencyModel");
 
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: "30d",
+  });
+};
+
 const getAgencies = asyncHandler(async (req, res) => {
   const agencies = await Agency.find({});
-  res.status(200).json(agencies);
+  //Omit sensitive data before sending the response
+  const response = agencies.map((agency) => {
+    return {
+      _id: agency._id,
+      name: agency.name,
+      address: agency.address,
+      agencyType: agency.agencyType,
+      coordinates: agency.coordinates,
+      available: agency.available,
+    };
+  });
+  res.status(200).json(response);
+});
+
+const sortAgencies = asyncHandler(async (req, res) => {
+  const agencies = await Agency.find({
+    agencyType: req.body.agencyType,
+    available: true,
+  });
+  const sourceCoordinates = req.body.sourceCoordinates;
+  const sortedAgencies = agencies.sort((a, b) => {
+    return (
+      Math.pow(a.coordinates[0] - sourceCoordinates[0], 2) +
+      Math.pow(a.coordinates[1] - sourceCoordinates[1], 2) -
+      Math.pow(b.coordinates[0] - sourceCoordinates[0], 2) -
+      Math.pow(b.coordinates[1] - sourceCoordinates[1], 2)
+    );
+  });
+  //Omit sensitive data before sending the response
+  const response = sortedAgencies.map((agency) => {
+    return {
+      _id: agency._id,
+      name: agency.name,
+      address: agency.address,
+      agencyType: agency.agencyType,
+      coordinates: agency.coordinates,
+      available: agency.available,
+    };
+  });
+  res.status(200).json(response);
 });
 
 const createAgency = asyncHandler(async (req, res) => {
@@ -19,13 +64,31 @@ const createAgency = asyncHandler(async (req, res) => {
     coordinates: req.body.coordinates,
     available: req.body.available,
   });
-  res.status(200).json({ message: "Agency created", agency });
+  res.status(201).json({
+    _id: agency._id,
+    name: agency.name,
+    email: agency.email,
+    token: generateToken(agency._id),
+  });
 });
 
-const loginAgency = asyncHandler(async (req, res) => {});
+const loginAgency = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  const agency = await Agency.findOne({ email });
+
+  if (agency && (await bcrypt.compare(password, agency.password))) {
+    res.json({
+      _id: agency._id,
+      name: agency.name,
+      email: agency.email,
+      token: generateToken(agency._id),
+    });
+  }
+});
 
 const getMyAgency = asyncHandler(async (req, res) => {
-  const agency = await Agency.findById(req.user._id);
+  const agency = await Agency.findById(req.agency._id);
   res.status(200).json(agency);
 });
 
@@ -50,6 +113,7 @@ const deleteAgency = asyncHandler(async (req, res) => {
 
 module.exports = {
   getAgencies,
+  sortAgencies,
   createAgency,
   loginAgency,
   getMyAgency,
