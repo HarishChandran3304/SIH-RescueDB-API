@@ -11,6 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/api/agencies", require("./routes/agencyRoutes"));
+app.use("/api/requests", require("./routes/requestRoutes"));
 
 app.listen(PORT, () => {
   console.log(`Server Started on port ${PORT}`);
