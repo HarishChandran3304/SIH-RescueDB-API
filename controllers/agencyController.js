@@ -111,6 +111,26 @@ const deleteAgency = asyncHandler(async (req, res) => {
   res.status(200).json({ id: req.params.id });
 });
 
+const getAssignedTo = asyncHandler(async (req, res) => {
+  const agency = await Agency.findById(req.agency.id);
+  const assignedTo = await Request.findById(agency.assignedTo);
+  res.status(200).json(assignedTo);
+});
+
+const assignRequestToAgency = asyncHandler(async (req, res) => {
+  const agency = await Agency.findById(req.agency.id);
+  const request = await Request.findById(req.params.id);
+
+  agency.assignedTo.push(request.id);
+  agency.available = false;
+  request.assignedTo.push(agency.id);
+
+  await agency.save();
+  await request.save();
+
+  res.status(200).json({ message: "Request assigned to agency" });
+});
+
 module.exports = {
   getAgencies,
   sortAgencies,
@@ -119,4 +139,6 @@ module.exports = {
   getMyAgency,
   updateAgency,
   deleteAgency,
+  getAssignedTo,
+  assignRequestToAgency,
 };

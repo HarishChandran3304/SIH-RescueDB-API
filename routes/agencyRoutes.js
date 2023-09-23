@@ -8,6 +8,8 @@ const {
   getMyAgency,
   updateAgency,
   deleteAgency,
+  getAssignedTo,
+  assignRequestToAgency,
 } = require("../controllers/agencyController");
 const { protect } = require("../middleware/authMiddleware");
 
@@ -18,5 +20,7 @@ router.post("/login", protect, loginAgency);
 router.get("/myagency", protect, getMyAgency);
 router.put("/:id", protect, updateAgency);
 router.delete("/:id", protect, deleteAgency);
+router.get("/assignedto", protect, getAssignedTo);
+router.put("/:id/assign", protect, assignRequestToAgency);
 
 module.exports = router;

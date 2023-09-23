@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Agency = require("./rescueAgencyModel");
+const Request = require("./requestModel");
 
 const rescueAgencySchema = new mongoose.Schema(
   {
@@ -34,7 +34,12 @@ const rescueAgencySchema = new mongoose.Schema(
     currentRequest: {
       type: mongoose.Schema.Types.ObjectId,
       required: false,
-      ref: "Rescue",
+      ref: "Request",
+    },
+    assignedTo: {
+      type: [mongoose.Schema.Types.ObjectId],
+      required: false,
+      ref: "Request",
     },
   },
   {
